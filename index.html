@@ -1,0 +1,112 @@
+<header>
+  <h1>🎴 ミギタワン</h1>
+</header>
+
+<main>
+  <div class="card">
+    <p>残り口数：<span id="stock">10</span></p>
+    <button onclick="draw()">引く</button>
+    <br><br>
+    <button onclick="resetOripa()">リセット</button>
+    <div class="result" id="result">---</div>
+  </div>
+
+  <div class="history">
+    <h3>排出履歴</h3>
+    <ul id="history"></ul>
+  </div>
+</main>
+body {
+  font-family: system-ui, sans-serif;
+  background: #0f172a;
+  color: #e5e7eb;
+  margin: 0;
+  text-align: center;
+}
+
+header {
+  padding: 2rem;
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+}
+
+main {
+  padding: 2rem;
+}
+
+.card {
+  background: #020617;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 420px;
+  margin: 2rem auto;
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.4);
+}
+
+button {
+  font-size: 1.1rem;
+  padding: 0.8rem 2rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  background: #7c3aed;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.result {
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.history {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #c7d2fe;
+}
+let stock = 100;
+
+const prizes = [
+  { name: "ウデンタモツ（SSR）", weight: 5 },
+  { name: "ソルト（SR）", weight: 15 },
+  { name: "たける（R）", weight: 30 },
+  { name: "なおひろ（N）", weight: 50 }
+];
+
+function drawPrize() {
+  const total = prizes.reduce((sum, p) => sum + p.weight, 0);
+  let rand = Math.random() * total;
+
+  for (const prize of prizes) {
+    if (rand < prize.weight) return prize.name;
+    rand -= prize.weight;
+  }
+}
+
+function draw() {
+  if (stock <= 0) {
+    alert("完売しました！");
+    return;
+  }
+
+  stock--;
+  document.getElementById("stock").textContent = stock;
+
+  const result = drawPrize();
+  document.getElementById("result").textContent = result;
+
+  const li = document.createElement("li");
+  li.textContent = result;
+  document.getElementById("history").prepend(li);
+}
+function resetOripa() {
+  stock = 100;
+  document.getElementById("stock").textContent = stock;
+
+  document.getElementById("result").textContent = "---";
+  document.getElementById("history").innerHTML = "";
+
+  alert("リセットしました");
+}
